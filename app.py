@@ -9,12 +9,35 @@ df['Fecha Actualizacion']=df['Fecha Actualizacion'].str.replace('/', '-')
 app = Flask(__name__)
 api = Api(app)
 
-class TodoSimple(Resource):
-    def get(self, fecha):
-        print(fecha)
-        return df[df['Fecha Actualizacion']==fecha].to_json()
+class getAll(Resource):
+    def get(self):
+        return df.to_json()
 
-api.add_resource(TodoSimple, '/date/<string:fecha>')
+api.add_resource(getAll, '/')
+
+class getDate(Resource):
+    def get(self, date):
+        return df[df['Fecha Actualizacion']==date].to_json()
+
+api.add_resource(getDate, '/date/<string:date>')
+
+class getState(Resource):
+    def get(self, state):
+        return df[df['Estado']==str(state)].to_json()
+
+api.add_resource(getState, '/state/<string:state>')
+
+class getDateTotal(Resource):
+    def get(self, date):
+        return df[df['Fecha Actualizacion']==date].groupby('Estado').size().to_json()
+
+api.add_resource(getDateTotal, '/date/<string:date>/agg')
+
+class getStateTotal(Resource):
+    def get(self, state):
+        return df[df['Estado']==state].groupby('Fecha Actualizacion').size().to_json()
+
+api.add_resource(getStateTotal, '/state/<string:state>/agg')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
