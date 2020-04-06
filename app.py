@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 import pandas as pd
+import os
 
 df=pd.read_csv('https://raw.githubusercontent.com/jairgs/Covid19MexicoDatos/master/allData.csv')
 df['Fecha Actualizacion']=df['Fecha Actualizacion'].str.replace('/', '-')
@@ -17,4 +18,4 @@ api.add_resource(TodoSimple, '/date/<string:fecha>')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run_server(host='0.0.0.0', debug=False, port=port)
+    app.run(host='0.0.0.0', debug=False, port=port)
