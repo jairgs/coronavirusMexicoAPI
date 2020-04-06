@@ -16,4 +16,5 @@ class TodoSimple(Resource):
 api.add_resource(TodoSimple, '/date/<string:fecha>')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run_server(host='0.0.0.0', debug=False, port=port)
